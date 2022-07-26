@@ -43,9 +43,6 @@ export default function TodoForm(props) {
             <Form.Control type="text" name="assignee" placeholder="Assignee Name" onChange={handleInputChange} />
         </Form.Group>
         <Form.Group>
-          {/* <Form.Label>
-            <span>Difficulty Rating</span>
-          </Form.Label> */}
             <Form.Control defaultValue="1" type="range" min="1" max="5" name="difficulty" onChange={handleInputChange} />
         </Form.Group>
         <Button variant="primary" type="submit">Add Item</Button>

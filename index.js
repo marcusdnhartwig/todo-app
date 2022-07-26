@@ -8,3 +8,6 @@ class Main extends React.Component {
     return <App />;
   }
 }
+
+const rootElement = document.getElementById('root');
+ReactDOM.render(<Main />, rootElement);
