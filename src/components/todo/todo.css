@@ -13,7 +13,15 @@
   display: block;
 }
 
+.todo-diff {
+  fill: rgb(213, 23, 23);
+}
+
 .bp4-card {
   margin: 10px 20px;
   width: 200px;
+}
+
+.bp4-button {
+  color: rgb(2, 124, 238);
 }
