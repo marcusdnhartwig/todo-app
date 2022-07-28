@@ -1,34 +1,58 @@
-import { createContext, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
-export const SettingsContext = createContext()
+const storage = JSON.parse(localStorage.getItem('todo'));
 
-export default function SettingsProvider({ children }) {
+// 3 steps to use context
+// step 1:  Create context object
+export const SettingsContext = React.createContext();
 
-  const [completed, setCompleted] = useState(false)
-  const [itemsPerScreen, setItemsPerScreen] = useState(3)
-  const [sortField, setSortField] = useState('')
+// step 2: create a provider component
+function SettingsProvider ({children}){
 
-  const updateCompleted = () => {
-    setCompleted(!completed)
+  // step 3: create some state
+  const [completed, setCompleted] = useState(storage ? storage.completed : false);
+  const [pageItems, setPageItems] = useState(storage ? storage.pageItems : 3);
+  const [sort, setSort] = useState(storage ? storage.sort : 'difficulty');
+  const [save, setSave] = useState('false')
+
+  // create some behaviors
+  const showCompleted = () => {
+    // make sure its a boolean
+    setCompleted(!completed);
+  };
+
+  const changeItems = (quantity) => {
+    setPageItems(quantity);
+  };
+
+  const sortBy = (sortStr) => {
+    // possible validation:  make sure a property in our item?  maybe an enum in our form?  
+    setSort(sortStr);
   }
 
-  const updateItemsPerScreen = (val) => {
-    setItemsPerScreen(val)
+  const storeSettings = () => {
+    setSave(!save);
   }
 
-  const updateSortField = (val) => {
-    setSortField(val)
-  }
+  useEffect(() => {
+    localStorage.setItem('todo', JSON.stringify({completed, pageItems, sort}))
+  }, [save]);
 
-  const settings = {
+  const values = {
     completed,
-    itemsPerScreen,
-    sortField
+    pageItems,
+    sort,
+    showCompleted,
+    changeItems,
+    sortBy,
+    storeSettings,
   }
 
-  return (
-    <SettingsContext.Provider value={settings}>
+  return(
+    <SettingsContext.Provider value={values}>
       {children}
     </SettingsContext.Provider>
   )
 }
+
+export default SettingsProvider;

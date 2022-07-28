@@ -1,6 +1,12 @@
 # Todo Application
 
-## Phase 1:
+## UMLs
+
+![img](./assets/Screen%20Shot%202022-07-25%20at%203.54.52%20PM.png)
+
+![img](./assets/Screen%20Shot%202022-07-27%20at%2012.43.25%20PM.png)
+
+# Phase 1:
 
 Perform some refactoring of the To Do application as built by another team. This application mixes application state and user settings at the top level and passes things around. It was a good proof of concept, but we need to make this production ready.
 
@@ -56,11 +62,7 @@ Perform some refactoring of the To Do application as built by another team. This
 
   - Can they see context?
 
-## UML
-
-![img](./assets/Screen%20Shot%202022-07-25%20at%203.54.52%20PM.png)
-
-## Phase 2
+# Phase 2
 
 In Phase 2, we’re going to extend the functionality of our application by allowing the user to make some decisions on how they would like the application to function. Specifically, we’ll let them make changes to 2 settings.
 
@@ -118,6 +120,76 @@ In Phase 2, we’re going to extend the functionality of our application by allo
 
   * If you are past the first n items (i.e. on page 2 or higher), add a button labeled Previous that will replace the list with the previous n items in the list.
 
+# Phase 3:
+
+Extend the functionality of the application by requiring users be logged in to view items and also restrict access based on user type. The user stories from Phases 1, and 2 remain unchanged. For this phase, we are now adding the following new user stories.
+
+## User Stories:
+
+* As a user, I want to provide a way for other users to create new accounts
+
+* As a user, I want to provide a way for all users to login to their account
+
+* As a user, I want to make sure that my To Do items are only viewable to users that have logged in with a valid account.
+
+* As a user, I want to ensure that only fellow users that are allowed to “create”, based on their user type, can add new To Do Items
+
+* As a user, I want to ensure that only fellow users that are allowed to “update”, based on their user type, can mark To Do Items complete
+
+* As a user, I want to ensure that only fellow users that are allowed to “delete”, based on their user type, can delete new To Do Items
+
+## Technical Requirements / Notes
+
+*Technical requirements for the core application are unchanged from the prior phases, with the addition of an Authentication Context Provider and Components that consume the Context Values and Behaviors.*
+
+1. Implement a Login/Auth React Context, “protect” the To Do application by restricting access to the various application features based on the users’ login status and capabilities.
+  
+  * Define a function that can simulate a login event.
+
+    * Parameters: username and password as strings.
+    * Sets a User on the auth context, and changes login status to true.
+
+  * Define a function that can simulate a logout event.
+
+    * Resets the User object and changes login status to `false.
+
+  * Define a function that can authorize a User based on a capabilty.
+
+    * Parameters: a capability as a string.
+
+    * Returns a boolean whether the user has the capabililty parameter.
+
+2. Create an <Auth /> component with the following features:
+
+  * Given a capability prop of type string, conditionally render components based on the user stored in context.
+
+  * **Hide the entire interface until the user has logged in.**
+
+  * **Implements the following RBAC rules:**
+
+    * Logged In Users with ‘read’ permissions can see the summary/count.
+
+    * Logged In Users with ‘read’ permissions can see the list of To Do Items.
+
+    * Logged In Users with ‘update’ permissions can click the records to mark them as complete.
+
+    * Logged In Users with ‘create’ permissions can create new items.
+
+    * Logged In Users with ‘delete’ permissions can delete items.
+
+3. Implement a <Login /> Component that has the following features:
+
+  * Provide an account login screen with a form.
+
+    * Accepts Username and Password
+
+    * On successful login, store the token as a cookie
+
+  * If a user returns and has a valid login cookie, hide the login form and consider them “Logged In”
+
+    * Display a logout button instead of a form if they are “Logged In”.
+
+
 # Colaborators:
 
   > Abdinasir Yussuf
@@ -136,76 +208,3 @@ In Phase 2, we’re going to extend the functionality of our application by allo
 
   > Brady Davenport
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-# todo-app
