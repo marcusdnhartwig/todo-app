@@ -29,10 +29,10 @@ const testUsers = {
     email: 'user@fakeuser.com',
     token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyZTBmMGZjMzNjZTQ5MDAxODlmMzhjMCIsImNhcGFiaWxpdGllcyI6WyJyZWFkIl0sInR5cGUiOiJ1c2VyIiwiaWF0IjoxNjU4OTA4OTI0LCJleHAiOjE2NTg5MTI1MjR9.t7c7k2LbaTxsdfYjx_WC3QiP4MycU8sZryVyXQqJQH',
   }
-  
+
 }
 
-function AuthProvider({children}) {
+function AuthProvider({ children }) {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState({});
@@ -47,25 +47,25 @@ function AuthProvider({children}) {
     // tomorrow we don't use dummy data - we hit DB
     let authCredentials = testUsers[username];
 
-    if (authCredentials && authCredentials.password === password){
+    if (authCredentials && authCredentials.password === password) {
       try {
-       _validateToken(authCredentials.token);
-      } catch (e){
+        _validateToken(authCredentials.token);
+      } catch (e) {
         // maybe setError?
         console.error(e);
       }
     }
   }
 
-  function _validateToken(token){
+  function _validateToken(token) {
     try {
       let validUser = jwt_decode(token);
-      if(validUser){
+      if (validUser) {
         setUser(validUser);
         setIsLoggedIn(true);
         cookie.save('auth', token)
       }
-    } catch(e){
+    } catch (e) {
       setIsLoggedIn(false);
       setError(e)
     }
