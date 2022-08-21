@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const useForm = (callback, defaultValues = {}) => {
+const useForm = (callback, defaultValues={}) => {
 
   const [values, setValues] = useState({});
 
@@ -8,6 +8,7 @@ const useForm = (callback, defaultValues = {}) => {
     event.preventDefault();
     callback(values);
   };
+
   const handleChange = (event) => {
     event.persist();
 
@@ -15,10 +16,12 @@ const useForm = (callback, defaultValues = {}) => {
     if (parseInt(value)) {
       value = parseInt(value);
     }
+
     setValues(values => ({ ...values, [name]: value }));
   };
-  useEffect(() => {
-    setValues(defaultValues);
+
+  useEffect( () => {
+    setValues( defaultValues );
   }, [defaultValues]);
 
   return {

@@ -1,30 +1,30 @@
 import React, { useEffect, useState, useContext } from 'react';
 import useForm from '../../hooks/form.js';
-import { SettingsContext } from "../../context/setings/settings.js";
-import Header from "../header/header";
-import './todo.css'
+import { SettingsContext } from '../../Context/Settings';
+import Header from '../Header/Header'
+import List from '../List/List';
 
 import { v4 as uuid } from 'uuid';
 
 const ToDo = () => {
 
-  const settings = useContext(SettingsContext)
-  console.log(settings);
   const [defaultValues] = useState({
-    difficulty: 3,
+    difficulty: 4,
   });
   const [list, setList] = useState([]);
+  const [showList, setShowList] = useState(false);
   const [incomplete, setIncomplete] = useState([]);
-  const [start, setStart] = useState(0)
-  const [end, setEnd] = useState(settings.itemsPerScreen)
   const { handleChange, handleSubmit } = useForm(addItem, defaultValues);
+  const settings = useContext(SettingsContext);
 
   function addItem(item) {
     item.id = uuid();
-    item.complete = settings.completed;
+    item.completed = settings.completed;
     console.log(item);
     setList([...list, item]);
+    setShowList(true);
   }
+
 
   function deleteItem(id) {
     const items = list.filter(item => item.id !== id);
@@ -35,23 +35,21 @@ const ToDo = () => {
 
     const items = list.map(item => {
       if (item.id === id) {
-        item.complete = !item.complete;
+        item.completed = !item.completed;
       }
       return item;
     });
+
     setList(items);
+
   }
 
-  function handleNextPageChange() {
-    setStart((start) => start + 3)
-    setEnd((end) => end + 3)
+  function radio(e) {
+
   }
-  function handlePreviousPageChange() {
-    setStart((start) => start - 3)
-    setEnd((end) => end - 3)
-  }
+
   useEffect(() => {
-    let incompleteCount = list.filter(item => !item.complete).length;
+    let incompleteCount = list.filter(item => !item.completed).length;
     setIncomplete(incompleteCount);
     document.title = `To Do List: ${incomplete}`;
   }, [list]);
@@ -60,43 +58,32 @@ const ToDo = () => {
     <>
       <Header incomplete={incomplete} />
 
-      <h2 className="todo-title">Add To-Do Item</h2>
+      <form onSubmit={handleSubmit}>
 
-      <form onSubmit={handleSubmit} className="todo-form">
+        <h2>Add To Do Item</h2>
 
-        <label className="todo-input">
-          <span>To-Do Item</span>
+        <label>
+          <span>To Do Item</span>
           <input onChange={handleChange} name="text" type="text" placeholder="Item Details" />
         </label>
 
-        <label className="todo-input">
+        <label>
           <span>Assigned To</span>
           <input onChange={handleChange} name="assignee" type="text" placeholder="Assignee Name" />
         </label>
 
-        <label className="todo-diff">
+        <label>
           <span>Difficulty</span>
           <input onChange={handleChange} defaultValue={defaultValues.difficulty} type="range" min={1} max={5} name="difficulty" />
         </label>
 
-        <label className="todo-input">
-          <button className="bp4-button bp4-icon-add" type="submit">Add Task</button>
+        <label>
+          <button type="submit">Add Item</button>
         </label>
       </form>
 
-      <div className="todo-list">
-        {list.slice(start, end).map(item => (
-          <div key={item.id} className="bp4-card bp4-elevation-2">
-            <p>{item.text}</p>
-            <p><small>Assigned to: {item.assignee}</small></p>
-            <p><small>Difficulty: {item.difficulty}</small></p>
-            <div onClick={() => toggleComplete(item.id)}>Complete: {item.complete.toString()}</div>
-          </div>
-        ))}
-      </div>
+      {showList && <List list={list} toggleComplete={toggleComplete} />}
 
-      {end < list.length && <button className="bp4-button" onClick={handleNextPageChange}>Next Page</button>}
-      {start > 0 && <button className="bp4-button" onClick={handlePreviousPageChange}>Previous Page</button>}
     </>
   );
 };
