@@ -28,8 +28,8 @@ const SettingsForm = () => {
             name="showCompleted"
             onChange={handleChange}
             label="Show completed tasks in list?" >
-            <Radio label="Show completed tasks in list" value="true" />
-            <Radio label="Don't show completed tasks in list" value="false" />
+            <Radio label="SHOW completed tasks" value="true" />
+            {/* <Radio label="DON'T show completed tasks in list" value="false" /> */}
           </RadioGroup>
 
           <Label>
